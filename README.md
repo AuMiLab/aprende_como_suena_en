@@ -1,2 +1,3 @@
-# aprende_como_suena_en
-Repositorio para aplicacion de escuela de invierno 2024 de la Universidad Austral de Chile
+# Como sonara esto en ....?
+Aplicación didactica para enseñar como funciona el sonido en diferentes recintos cerrados, como es el "eco" y la reverberación
+
