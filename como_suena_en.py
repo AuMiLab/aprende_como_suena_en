@@ -1,4 +1,5 @@
 import flet as ft
+import librosa as lib
 import os
 
 url = os.path.join(os.getcwd(), "respuestas/ref.wav")
@@ -6,6 +7,7 @@ url = os.path.join(os.getcwd(), "respuestas/ref.wav")
 def main(page: ft.Page):
 
     respuestas = ["Ancud","Aula Magna","Catedral","Reverberante"]
+    conv = {}
     selected_files = ft.Text()
     selected_filesz = ft.Text(value='HelloWorld')
     audio1 = ft.Audio(
@@ -50,6 +52,10 @@ def main(page: ft.Page):
 
     def handle_tap(e):
         print(f"handle_tap")
+
+    def select_convolve(e):
+        recinto = e.value
+        r,fs1 = lib.load(conv[recinto])
 
     anchor = ft.SearchBar(
         view_elevation=len(respuestas),
@@ -113,8 +119,8 @@ def main(page: ft.Page):
         anchor,
         ft.Row(
             [
-                ft.ElevatedButton(anchor.controls, on_click=lambda _: audio1.play()), # TODO: fix button
-                ft.ElevatedButton("a", on_click=lambda _: audio1.play())
+                ft.ElevatedButton("Como sonará?", on_click=lambda _: select_convolve(anchor)), 
+                ft.ElevatedButton("a", on_click=lambda _: audio2.play())
             ])
     )
 
