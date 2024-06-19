@@ -7,7 +7,7 @@ url = os.path.join(os.getcwd(), "respuestas/ref.wav")
 def main(page: ft.Page):
 
     respuestas = ["Ancud","Aula Magna","Catedral","Reverberante"]
-    conv = {}
+    conv = {} # TODO: path to respuestas
     selected_files = ft.Text()
     selected_filesz = ft.Text(value='HelloWorld')
     audio1 = ft.Audio(
@@ -56,6 +56,7 @@ def main(page: ft.Page):
     def select_convolve(e):
         recinto = e.value
         r,fs1 = lib.load(conv[recinto])
+
 
     anchor = ft.SearchBar(
         view_elevation=len(respuestas),
@@ -120,7 +121,7 @@ def main(page: ft.Page):
         ft.Row(
             [
                 ft.ElevatedButton("Como sonará?", on_click=lambda _: select_convolve(anchor)), 
-                ft.ElevatedButton("a", on_click=lambda _: audio2.play())
+                ft.ElevatedButton("a", on_click=lambda _: audio2.play()) # TODO: not define audio2
             ])
     )
 
