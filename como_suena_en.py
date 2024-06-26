@@ -1,18 +1,34 @@
 import flet as ft
 import librosa as lib
 import os
+#Cristobal
+import numpy as np
+import soundfile as sf
 
 url = os.path.join(os.getcwd(), "respuestas/ref.wav")
 
 
 def main(page: ft.Page):
 
-    respuestas = ["Ancud", "Aula Magna", "Catedral", "Reverberante"]
-    conv = {}  # TODO: path to respuestas
+    respuestas = ["Catedral Ancud", "Aula Magna", "Catedral Valdivia", "Reverberante"]
+    respuestas_path = [os.path.join(os.getcwd(),"respuestas",r) for r in sorted(os.listdir('respuestas')) if r != "ref.wav"]
+    conv = {respuestas[i]:respuestas_path[i] for i in range(len(respuestas))}  # TODO: path to respuestas
     selected_files = ft.Text()
     selected_filesz = ft.Text(value='HelloWorld')
     audio1 = ft.Audio(
         src=[f for f in selected_filesz.value][0],  # Inicialmente sin fuente
+        autoplay=False,
+        volume=1,
+        balance=0,
+        on_loaded=lambda _: print("Loaded"),
+        on_duration_changed=lambda e: print("Duration changed:", e.data),
+        on_position_changed=lambda e: print("Position changed:", e.data),
+        on_state_changed=lambda e: print("State changed:", e.data),
+        on_seek_complete=lambda _: print("Seek complete"),
+    )
+
+    audio2 = ft.Audio(
+        src= [f for f in selected_filesz.value][0],  # Abrir convolve
         autoplay=False,
         volume=1,
         balance=0,
@@ -56,8 +72,24 @@ def main(page: ft.Page):
         print(f"handle_tap")
 
     def select_convolve(e):
+        sr_ref=44100
         recinto = e.value
-        r, fs1 = lib.load(conv[recinto])
+        r, fs1 = lib.load(conv[recinto.replace("Recinto ","")], sr=sr_ref)
+        sig, fs2 = lib.load(audio1.src, sr=sr_ref)
+
+        print(f"Convolving...")
+
+        sig_conv = np.convolve(sig,r, mode="valid")
+
+        sf.write('sig_conv.wav', sig_conv, sr_ref, subtype='PCM_16')
+
+        print(f"Convolved!")
+        audio2.src = os.path.join(os.getcwd(), "sig_conv.wav")
+        page.update()
+
+
+
+        
 
     anchor = ft.SearchBar(
         view_elevation=len(respuestas),
@@ -74,17 +106,6 @@ def main(page: ft.Page):
     )
 
     pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
-    audio1 = ft.Audio(
-        src=[f for f in selected_filesz.value][0],  # Inicialmente sin fuente
-        autoplay=False,
-        volume=1,
-        balance=0,
-        on_loaded=lambda _: print("Loaded"),
-        on_duration_changed=lambda e: print("Duration changed:", e.data),
-        on_position_changed=lambda e: print("Position changed:", e.data),
-        on_state_changed=lambda e: print("State changed:", e.data),
-        on_seek_complete=lambda _: print("Seek complete"),
-    )
     page.overlay.append(pick_files_dialog)
     page.overlay.append(audio1)
 
