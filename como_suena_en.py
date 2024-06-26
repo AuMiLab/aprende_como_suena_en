@@ -4,10 +4,11 @@ import os
 
 url = os.path.join(os.getcwd(), "respuestas/ref.wav")
 
+
 def main(page: ft.Page):
 
-    respuestas = ["Ancud","Aula Magna","Catedral","Reverberante"]
-    conv = {} # TODO: path to respuestas
+    respuestas = ["Ancud", "Aula Magna", "Catedral", "Reverberante"]
+    conv = {}  # TODO: path to respuestas
     selected_files = ft.Text()
     selected_filesz = ft.Text(value='HelloWorld')
     audio1 = ft.Audio(
@@ -20,7 +21,8 @@ def main(page: ft.Page):
         on_position_changed=lambda e: print("Position changed:", e.data),
         on_state_changed=lambda e: print("State changed:", e.data),
         on_seek_complete=lambda _: print("Seek complete"),
-    ) 
+    )
+
     def pick_files_result(e: ft.FilePickerResultEvent):
         selected_files.value = (
             ", ".join(map(lambda f: f.name, e.files)
@@ -55,8 +57,7 @@ def main(page: ft.Page):
 
     def select_convolve(e):
         recinto = e.value
-        r,fs1 = lib.load(conv[recinto])
-
+        r, fs1 = lib.load(conv[recinto])
 
     anchor = ft.SearchBar(
         view_elevation=len(respuestas),
@@ -86,12 +87,13 @@ def main(page: ft.Page):
     )
     page.overlay.append(pick_files_dialog)
     page.overlay.append(audio1)
-    
+
     page.add(
         ft.ElevatedButton(
             "Pick file",
             icon=ft.icons.UPLOAD_FILE,
-            on_click=lambda _: pick_files_dialog.pick_files(allow_multiple=False)
+            on_click=lambda _: pick_files_dialog.pick_files(
+                allow_multiple=False)
         ),
         selected_files,
         ft.Row(
@@ -120,9 +122,12 @@ def main(page: ft.Page):
         anchor,
         ft.Row(
             [
-                ft.ElevatedButton("Como sonará?", on_click=lambda _: select_convolve(anchor)), 
-                ft.ElevatedButton("a", on_click=lambda _: audio2.play()) # TODO: not define audio2
+                ft.ElevatedButton(
+                    "Como sonará?", on_click=lambda _: select_convolve(anchor)),
+                # TODO: not define audio2
+                ft.ElevatedButton("a", on_click=lambda _: audio2.play())
             ])
     )
+
 
 ft.app(target=main)
