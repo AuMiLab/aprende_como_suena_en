@@ -108,7 +108,7 @@ def main(page: ft.Page):
     pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
     page.overlay.append(pick_files_dialog)
     page.overlay.append(audio1)
-
+    page.overlay.append(audio2)
     page.add(
         ft.ElevatedButton(
             "Pick file",
@@ -144,9 +144,9 @@ def main(page: ft.Page):
         ft.Row(
             [
                 ft.ElevatedButton(
-                    "Como sonará?", on_click=lambda _: select_convolve(anchor)),
-                # TODO: not define audio2
-                ft.ElevatedButton("a", on_click=lambda _: audio2.play())
+                    "Convoluciona!", on_click=lambda _: select_convolve(anchor)),
+                
+                ft.ElevatedButton("Como sonará?", on_click=lambda _: audio2.play())
             ])
     )
 
